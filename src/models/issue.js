@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const issueSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: [true, 'Title is required'],
     },
     description: String,
     status: {
@@ -30,7 +30,8 @@ const issueSchema = new mongoose.Schema({
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: [true, 'Created By is required']
     }
 });
 
