@@ -1,0 +1,62 @@
+type Query {
+    issues (filter: IssueFilter): [Issue!]!
+    issue (id: ID!): Issue
+    users: [User!]!
+    user (id: ID!): User
+}
+
+type Mutation {
+    createIssue (input: IssueInput!): Issue!
+    updateIssue (id: ID!, input: IssueInput!): Issue!
+    deleteIssue (id: ID!): Issue!
+    createUser (input: UserInput!): User!
+    updateUser (id: ID!, input: UserInput!): User!
+    deleteUser (id: ID!): User!
+}
+
+type Issue {
+    id: ID!
+    title: String!
+    description: String!
+    status: IssueStatus!
+    priority: IssuePriority!
+    createdAt: String!
+    lastUpdated: String!
+}
+
+input IssueInput {
+    title: String!
+    description: String!
+    status: IssueStatus!
+    priority: IssuePriority!
+}
+
+input IssueFilter {
+    status: IssueStatus
+    priority: IssuePriority
+}
+
+enum IssueStatus {
+    OPEN
+    IN_PROGRESS
+    DONE
+}
+
+enum IssuePriority {
+    LOW
+    MEDIUM
+    HIGH
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    password: String!
+}
+
+input UserInput {
+    name: String!
+    email: String!
+    password: String!
+}
