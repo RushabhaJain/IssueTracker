@@ -30,7 +30,6 @@ input IssueInput {
     description: String!
     status: IssueStatus!
     priority: IssuePriority!
-    assignedTo: ID
 }
 
 input IssueFilter {
