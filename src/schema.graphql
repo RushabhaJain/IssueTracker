@@ -6,8 +6,8 @@ type Query {
 }
 
 type Mutation {
-    createIssue (input: IssueInput!): Issue!
-    updateIssue (id: ID!, input: IssueInput!): Issue!
+    createIssue (input: CreateIssueInput!): Issue!
+    updateIssue (id: ID!, input: UpdateIssueInput!): Issue!
     deleteIssue (id: ID!): Issue!
     createUser (input: UserInput!): User!
     updateUser (id: ID!, input: UserInput!): User!
@@ -23,13 +23,21 @@ type Issue {
     createdAt: String!
     lastUpdated: String!
     assignedTo: User
+    createdBy: User!
 }
 
-input IssueInput {
+input CreateIssueInput {
     title: String!
-    description: String!
-    status: IssueStatus!
-    priority: IssuePriority!
+    description: String
+    priority: IssuePriority
+}
+
+input UpdateIssueInput {
+    title: String
+    description: String
+    status: IssueStatus
+    priority: IssuePriority
+    assignedTo: ID
 }
 
 input IssueFilter {
