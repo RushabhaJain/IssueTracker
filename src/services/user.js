@@ -5,12 +5,14 @@ export const createUser = async (user) => {
     if (user.name != null && user.email != null && user.password != null) {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
-        const newUser = new User({
-            name: user.name,
-            email: user.email,
-            password: user.password
-        });
-        return await User.create(newUser);
+        const newUser = await User.create(user);
+        // Create the token
+        const jwtPayload = {
+            id: newUser._id,
+            name: newUser.name,
+            email: newUser.email
+        };
+        return generateAccessToken(jwtPayload);
     }
     throw new Error('Please provide name, email and password');
 }
@@ -21,12 +23,32 @@ export const loginUser = async (user) => {
         if (userFromDB.length > 0) {
             const isMatch = await bcrypt.compare(user.password, userFromDB.password);
             if (isMatch) {
-                return userFromDB[0];
+                // Create the token
+                const jwtPayload = {
+                    id: userFromDB._id,
+                    name: userFromDB.name,
+                    email: userFromDB.email
+                };
+                return generateAccessToken(jwtPayload);
             }
             throw new Error(`Invalid email or password`);
         }
     }
     throw new Error('Please provide email and password');
+}
+
+export const getUserFromToken = async (token) => {
+    try {
+        const payload = await getTokenContent(token);
+        const userId = payload.id;
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user;
+    } catch (err) {
+
+    }
 }
 
 export const getUsers = async () => {
