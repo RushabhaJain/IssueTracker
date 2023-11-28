@@ -36,4 +36,8 @@ router.post("/login", validateLoginUserRequest, async (req, res) => {
     .send();
 });
 
+router.post("/logout", async (req, res) => {
+  return res.cookie("token", "").status(200).send();
+});
+
 export default router;

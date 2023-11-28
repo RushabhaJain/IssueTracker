@@ -3,12 +3,14 @@ import dotenv from 'dotenv';
 import { connectToDB } from './db/index.js';
 import IssueRouter from './router/issue.js';
 import AuthRouter from './router/auth.js';
+import cookieParser from 'cookie-parser';
 
 // Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 // Auth Router
 app.use(AuthRouter);
