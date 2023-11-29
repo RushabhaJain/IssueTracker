@@ -8,13 +8,13 @@ const issueSchema = new mongoose.Schema({
     description: String,
     status: {
         type: String,
-        enum: ['New', 'In Progress', 'Closed'],
-        default: 'New'
+        enum: ['OPEN', 'IN_PROGRESS', 'DONE'],
+        default: 'OPEN'
     },
     priority: {
         type: String,
-        enum: ['Low', 'Medium', 'High'],
-        default: 'Low'
+        enum: ['LOW', 'MEDIUM', 'HIGH'],
+        default: 'LOW'
     },
     createdAt: {
         type: Date,
