@@ -5,6 +5,7 @@ import {
   updateIssue,
   deleteIssue,
 } from "../services/issue.js";
+import { validateCreateIssueRequest } from "../middlewares/validationMiddleware.js";
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", validateCreateIssueRequest, async (req, res) => {
   try {
     const issue = await createIssue(req.body);
     res.send({

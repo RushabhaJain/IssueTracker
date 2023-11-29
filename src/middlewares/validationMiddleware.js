@@ -30,3 +30,18 @@ export const validateLoginUserRequest = (req, res, next) => {
     }
     next();
 };
+
+export const validateCreateIssueRequest = (req, res, next) => {
+    const schema = Joi.object({
+        title: Joi.string().required(),
+    });
+
+    const { error } = schema.validate(req.body);
+    if (error) {
+        return res.status(400).send({
+            success: false,
+            error: error.message
+        });
+    }
+    next();
+}
