@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser } from "../services/user.js";
+import { createUser, loginUser } from "../services/user.js";
 import {
   validateLoginUserRequest,
   validateRegisterUserRequest,
@@ -26,18 +26,29 @@ router.post("/register", validateRegisterUserRequest, async (req, res) => {
 });
 
 router.post("/login", validateLoginUserRequest, async (req, res) => {
-  const token = await loginUser(req.body);
-  return res
-    .cookie("token", token, {
-      httpOnly: true,
-      expires: new Date(Date.now() + 1000 * 60 * 60),
-    })
-    .status(200)
-    .send();
+  try {
+    const token = await loginUser(req.body);
+    return res
+      .cookie("token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 1000 * 60 * 60),
+      })
+      .status(200)
+      .send();
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      error: error.message,
+    });
+  }
 });
 
 router.post("/logout", async (req, res) => {
-  return res.cookie("token", "").status(200).send();
+    // Delete token cookie from response
+
+  return res.cookie("token", "", {
+    expires: new Date(0)
+  }).status(200).send();
 });
 
 export default router;
