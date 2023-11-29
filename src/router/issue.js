@@ -30,18 +30,16 @@ router.get("/", async (req, res) => {
 
 router.post("/", validateCreateIssueRequest, async (req, res) => {
   try {
+    req.body.createdBy = req.user._id;
     const issue = await createIssue(req.body);
-    res.send({
+    return res.send({
       success: true,
       data: {
         issue,
       },
     });
   } catch (error) {
-    console.dir(typeof error);
-    console.dir(error.errors);
-    
-    res
+    return res
       .send({
         success: false,
         error: error.message,
@@ -51,20 +49,48 @@ router.post("/", validateCreateIssueRequest, async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  await deleteIssue(req.params.id);
-  res.send({
-    success: true,
-  });
+  try {
+    await deleteIssue(req.params.id);
+    return res.send({
+      success: true,
+    });
+  } catch (error) {
+    if (error.name === "NotFoundError") {
+      return res.status(404).send({
+        success: false,
+        error: error.message,
+      });
+    } else {
+      return res.status(400).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  }
 });
 
 router.put("/:id", async (req, res) => {
-  const issue = await updateIssue(req.params.id, req.body);
-  res.send({
-    success: true,
-    data: {
-      issue,
-    },
-  });
+  try {
+    const issue = await updateIssue(req.params.id, req.body);
+    return res.send({
+      success: true,
+      data: {
+        issue,
+      },
+    });
+  } catch (error) {
+    if (error.name === "NotFoundError") {
+      return res.status(404).send({
+        success: false,
+        error: error.message,
+      });
+    } else {
+      return res.status(400).send({
+        success: false,
+        error: error.message,
+      });
+    }
+  }
 });
 
 export default router;

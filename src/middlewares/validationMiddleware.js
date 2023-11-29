@@ -34,6 +34,7 @@ export const validateLoginUserRequest = (req, res, next) => {
 export const validateCreateIssueRequest = (req, res, next) => {
     const schema = Joi.object({
         title: Joi.string().required(),
+        description: Joi.string()
     });
 
     const { error } = schema.validate(req.body);
