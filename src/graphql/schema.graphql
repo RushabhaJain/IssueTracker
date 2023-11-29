@@ -2,7 +2,7 @@ type Query {
     issues (filter: IssueFilter): [Issue!]!
     issue (id: ID!): Issue
     users: [User!]!
-    user (id: ID!): User
+    user: User
 }
 
 type Mutation {
@@ -17,7 +17,7 @@ type Mutation {
 type Issue {
     id: ID!
     title: String!
-    description: String!
+    description: String
     status: IssueStatus!
     priority: IssuePriority!
     createdAt: String!
