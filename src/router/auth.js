@@ -44,8 +44,6 @@ router.post("/login", validateLoginUserRequest, async (req, res) => {
 });
 
 router.post("/logout", async (req, res) => {
-    // Delete token cookie from response
-
   return res.cookie("token", "", {
     expires: new Date(0)
   }).status(200).send();

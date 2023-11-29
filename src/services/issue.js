@@ -2,8 +2,6 @@ import { Issue } from "../models/issue.js";
 
 // Create an issue
 export const createIssue = (issue) => {
-    issue['status'] = 'New';
-    issue['priority'] = issue.priority || 'Low';
     return Issue.create(issue);
 }
 
@@ -35,5 +33,12 @@ export const updateIssue = async (id, issue) => {
 
 // Delete the issue
 export const deleteIssue = async (id) => {
-    return Issue.deleteOne({ _id: id });
+    const issue = await Issue.findById(id);
+    await Issue.deleteOne({ _id: id });
+    return issue;
+}
+
+// Get issue by id
+export const getIssueById = async (id) => {
+    return await Issue.findById(id);
 }

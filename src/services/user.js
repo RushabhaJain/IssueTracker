@@ -40,13 +40,17 @@ export const getUserFromToken = async (token) => {
   try {
     const payload = await getTokenContent(token);
     const userId = payload.id;
-    const user = await User.findById(userId);
+    const user = await getUserById(userId);
     if (!user) {
       throw new Error("User not found");
     }
     return user;
   } catch (err) {}
 };
+
+export const getUserById = async (id) => {
+    return await User.findById(id);
+}
 
 export const getUsers = async () => {
   return await User.find();
