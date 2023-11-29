@@ -1,12 +1,13 @@
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
+import { generateAccessToken } from "../utils/token.js";
 
 export const createUser = async (user) => {
   try {
     const newUser = await User.create(user);
     // Create the token
     const jwtPayload = {
-      id: newUser._id,
+      id: newUser._id.toString(),
       name: newUser.name,
       email: newUser.email,
     };
@@ -19,23 +20,20 @@ export const createUser = async (user) => {
 };
 
 export const loginUser = async (user) => {
-  if (user.email != null && user.password != null) {
     const userFromDB = await User.findOne({ email: user.email });
-    if (userFromDB.length > 0) {
+    if (userFromDB) {
       const isMatch = await bcrypt.compare(user.password, userFromDB.password);
       if (isMatch) {
         // Create the token
         const jwtPayload = {
-          id: userFromDB._id,
-          name: userFromDB.name,
-          email: userFromDB.email,
+          id: userFromDB._id.toString(),
+          name: userFromDB.name
         };
-        return generateAccessToken(jwtPayload);
+        const token = generateAccessToken(jwtPayload);
+        return token;
       }
       throw new Error(`Invalid email or password`);
     }
-  }
-  throw new Error("Please provide email and password");
 };
 
 export const getUserFromToken = async (token) => {
