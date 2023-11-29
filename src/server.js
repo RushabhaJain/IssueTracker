@@ -4,6 +4,7 @@ import { connectToDB } from './db/index.js';
 import IssueRouter from './router/issue.js';
 import AuthRouter from './router/auth.js';
 import cookieParser from 'cookie-parser';
+import { authMiddleware } from './middlewares/authMiddleware.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -16,7 +17,7 @@ app.use(cookieParser());
 app.use(AuthRouter);
 
 // REST APIs
-app.use('/issues', IssueRouter);
+app.use('/issues', authMiddleware ,IssueRouter);
 
 
 const PORT = process.env.PORT || 3000;
