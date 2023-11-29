@@ -1,5 +1,5 @@
-import { User } from "../models/user";
-import { getTokenContent } from "../utils/token";
+import { User } from "../models/user.js";
+import { getTokenContent } from "../utils/token.js";
 
 export const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization || req.cookies.token;
